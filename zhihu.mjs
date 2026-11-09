@@ -1,3 +1,4 @@
+import {searchResultURL} from './lib/zhihu-search.mjs';
 import {assertAutomaticInbox} from './lib/inbox-policy.mjs';
 import fs from 'node:fs';import path from 'node:path';
 import {browser,workspace,atomicJSON,waitForLock} from './lib/runtime.mjs';
@@ -8,6 +9,9 @@ const args=process.argv.slice(2),cmd=args[0],opt=n=>args.includes('--'+n)?args[a
 try{assertAutomaticInbox();}catch(e){console.log(JSON.stringify({error:e.message,code:e.code,confirmed:false,deliveryUncertain:false}));process.exit(1);}
 const settings=JSON.parse(fs.readFileSync(path.join(workspace,'zhihu.json'))),accessFile=path.join(workspace,'.state/zhihu-access.json'),ledgerFile=path.join(workspace,'.state/zhihu-deliveries.json');
 const load=(p,f)=>fs.existsSync(p)?JSON.parse(fs.readFileSync(p)):f;
+if(cmd==='search'){await import('./zhihu-search.mjs');process.exit(process.exitCode||0);}
+if(cmd==='read'){const recent=load(path.join(workspace,'.state/zhihu-search-results.json'),{});if(args.includes('--query')||recent.at&&Date.now()-recent.at<86400000&&recent.items?.some(i=>i.url===searchResultURL(opt('url')))){await import('./zhihu-search.mjs');process.exit(process.exitCode||0);}}
+if(cmd==='read-visible'){await import('./zhihu-visible.mjs');process.exit(process.exitCode||0);}
 if(settings.mode==='home'&&['status','browse','read','like','comment','reply','comments'].includes(cmd)){await import('./zhihu-home.mjs');process.exit(process.exitCode||0);}
 if(!['status','browse','search','read','like','comment','reply','answer','share','notifications','reply-context'].includes(cmd))throw new Error('用法 status [--resume] | browse [--screens 3] | search --query 关键词 | read/like/comment/reply/answer/share --url 链接 [--text 正文 --confirm] | notifications');
 let b,p,budget,timer,release,dispatched=false;

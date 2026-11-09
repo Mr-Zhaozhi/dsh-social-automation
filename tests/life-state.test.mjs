@@ -3,9 +3,10 @@ import {discoveryDue,observeMood,scopedMood,lifeContext,repeatTopic,voiceChoice}
 import {eligibility} from '../lib/companion-policy.mjs';import {proactiveProblem} from '../lib/companion-content.mjs';
 import {SharedContext} from '../lib/shared-context.mjs';
 const now=Date.parse('2026-11-08T05:00:00Z');
-test('exploration reserves failed attempts, waits four hours and sleeps at night',()=>{
+test('exploration reserves failed attempts, waits three hours and sleeps at night',()=>{
  assert(discoveryDue({},now));assert(!discoveryDue({attempts:[{at:now-10000,date:'2026-11-08',status:'failed'}]},now));
- assert(!discoveryDue({attempts:[{at:now-8*3600000,date:'2026-11-08'},{at:now-4*3600000,date:'2026-11-08'}]},now));
+ assert(discoveryDue({attempts:[{at:now-8*3600000,date:'2026-11-08'},{at:now-4*3600000,date:'2026-11-08'}]},now));
+ assert(!discoveryDue({attempts:Array.from({length:4},()=>({at:now-4*3600000,date:'2026-11-08'}))},now));
  assert(!discoveryDue({},Date.parse('2026-11-08T16:00:00Z')));
 });
 test('voice counts toward two unanswered across midnight; owner return reopens',()=>{

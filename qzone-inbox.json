@@ -1,0 +1,7 @@
+{
+  "enabled": false,
+  "timezone": "Asia/Shanghai",
+  "start": "10:00",
+  "end": "23:30",
+  "intervalMinutes": 120
+}

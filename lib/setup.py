@@ -26,7 +26,7 @@ def main():
  print(install_chat_delivery())
  if patch.exists():
   text=patch.read_text()
-  for name in ['reliability','group-listener','social-planner','life','companion','social-inbox','douyin-inbox','fleet','zhihu','shared-context','quiet-delivery','group-address','quick-status','web-diagnostics','group-controls','group-conversation','browser-recovery','chat-panel-recovery','interest-search','passive-inbox']:
+  for name in ['reliability','group-listener','social-planner','life','companion','social-inbox','qzone-inbox','douyin-inbox','fleet','zhihu','shared-context','quiet-delivery','group-address','quick-status','web-diagnostics','group-controls','group-conversation','browser-recovery','chat-panel-recovery','interest-search','passive-inbox']:
    uri=(WORKSPACE/'plugins'/f'{name}.mjs').as_uri()
    if f'id: huohuo-{name}' not in text:text+=f'\n- insert:\n    - id: huohuo-{name}\n      name: {uri}\n'
    else:text=re.sub(r'(id: huohuo-'+re.escape(name)+r'\s+name:)\s+\S+',lambda m:m[1]+' '+uri,text)

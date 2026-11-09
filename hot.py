@@ -27,7 +27,10 @@ def fetch(job):
  except Exception as e:return False,'【'+name+'】抓取失败：'+str(e)[:120]
 def main():
  what=sys.argv[1] if len(sys.argv)>1 else 'all'
- if what not in ['all','news','bili',*HOT]:raise SystemExit('用法: all|weibo|douyin|zhihu|news|bili')
+ if what in ('ithome','toutiao'):
+  from news import load
+  d=load(what);print('【'+what+'】\n'+'\n'.join(x['title']+'\n'+x['url'] for x in d['items'][:12]));return
+ if what not in ['all','news','bili','ithome','toutiao',*HOT]:raise SystemExit('用法: all|weibo|douyin|zhihu|news|bili')
  jobs=[('hot',v[0],v[1]) for k,v in HOT.items() if what in ('all',k)]
  if what in ('all','news'):jobs += [('rss',u,n) for u,n in NEWS]
  if what in ('all','bili'):jobs.append(('bili','','B站热门'))
