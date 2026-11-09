@@ -1,0 +1,7 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {incomingCandidates,replyDecision} from '../lib/inbox-state.mjs';
+import {freshComment} from '../lib/inbox-state.mjs';
+const c=(id,mine=false)=>[{uid:'user',messages:[{id,mine,text:'你好'}]}];
+test('inbox baselines history, responds only to new inbound, never duplicates',()=>{const s={};assert.deepEqual(incomingCandidates(s,c('old')),[]);assert.equal(incomingCandidates(s,c('new')).length,1);assert.deepEqual(incomingCandidates(s,c('new')),[]);assert.deepEqual(incomingCandidates(s,c('own',true)),[]);});
+test('delivery uncertainty is retained; new contacts after baseline are eligible',()=>{const s={initialized:true,deliveries:{unknown:{status:'unknown'}}};assert.equal(incomingCandidates(s,c('unknown')).length,0);assert.equal(incomingCandidates(s,[{uid:'new',messages:[{id:'fresh',mine:false}]}]).length,1);});
+test('model only yields bounded reply text',()=>{assert.equal(replyDecision({reply:true,text:' 嗨 '}),'嗨');assert.equal(replyDecision({reply:false,text:'嗨'}),null);assert.equal(replyDecision({reply:true,text:'长'.repeat(181)}),null);});
+test('old or transactional notifications never trigger even if emoji hydration changes content',()=>{assert.equal(freshComment({time:'09-11',text:'礼貌借下楼，车找人'}),false);assert.equal(freshComment({time:'刚刚',text:'有顺风车吗'}),false);assert.equal(freshComment({time:'2分钟前',text:'准确还是速度更重要？'}),true);});

@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "timeZone": "Asia/Shanghai",
+  "enabled": false,
+  "startMinute": 600,
+  "endMinute": 1440,
+  "platforms": {}
+}

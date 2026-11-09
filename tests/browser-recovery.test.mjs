@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {eligibleHost,verifyOwner,sameHost} from '../lib/browser-recovery.mjs';
+const s={pid:123,profile:'/test/cli-profile',port:9227,ready:false,launchFailure:{code:'EDGE_FOCUS_RESET_FAILED'}};
+const owner={hostCommand:'/node /plugin/browser-host.mjs /test/cli-profile /test/control 9227',listenerPid:124,listenerParent:123,listenerCommand:'/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge --user-data-dir=/test/cli-profile --remote-debugging-port=9227'};
+test('only known focus failure or our retained guard is recoverable',()=>{assert(eligibleHost(s,s.profile));for(const change of [{pid:0},{port:9228},{profile:'/other'},{launchFailure:{code:'FOREIGN'}}])assert(!eligibleHost({...s,...change},s.profile));});
+test('foreign listener or host never becomes ready',()=>{assert(verifyOwner(s,owner));for(const change of [{listenerParent:999},{listenerPid:NaN},{hostCommand:'/unrelated'},{listenerCommand:'Microsoft Edge --remote-debugging-port=9227'}])assert.throws(()=>verifyOwner(s,{...owner,...change}));});
+test('state updates cannot overwrite a changed browser host',()=>{assert(sameHost(s,{...s,ready:true}));assert(!sameHost(s,{...s,pid:124}));assert(!sameHost(s,{...s,profile:'/other'}));});

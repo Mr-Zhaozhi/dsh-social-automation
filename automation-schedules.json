@@ -1,0 +1,62 @@
+[
+  {
+    "key": "qzone",
+    "id": "",
+    "title": "每日空间说说",
+    "days": 1,
+    "startMinute": 600,
+    "endMinute": 1320,
+    "enabled": false,
+    "sessionId": "",
+    "chatId": "",
+    "prompt": "先通过 ./qq-api.py get_qzone_msg_list 核对今日记录；明确授权后每天最多发布一条新内容，失败或未知结果不重发。 遵守 SOCIAL_POLICY.md；任务由插件续期，不另建提醒，运营通知仅给主人。"
+  },
+  {
+    "key": "browse",
+    "id": "",
+    "title": "每日资讯",
+    "days": 1,
+    "startMinute": 600,
+    "endMinute": 1320,
+    "enabled": false,
+    "sessionId": "",
+    "chatId": "",
+    "prompt": "运行 ./hot.sh all，自选一件有趣的内容，仅给主人私聊；无合适内容可不发送。 遵守 SOCIAL_POLICY.md；任务由插件续期，不另建提醒，运营通知仅给主人。"
+  },
+  {
+    "key": "douyin-like",
+    "id": "",
+    "title": "抖音互动",
+    "days": 1,
+    "startMinute": 600,
+    "endMinute": 1320,
+    "enabled": false,
+    "sessionId": "",
+    "chatId": "",
+    "prompt": "先 ./node-run.sh douyin-act.mjs status 核对专用页和额度；支持推荐流及详情页。仅对已经查看且确实喜欢的当前作品运行 ./node-run.sh douyin-act.mjs like 1。观看额度不足不启动观看、不重置额度。仅在主人明确授权范围内互动；身份或状态不明时停止，不重复调用。 遵守 SOCIAL_POLICY.md；任务由插件续期，不另建提醒，运营通知仅给主人。"
+  },
+  {
+    "key": "douyin-post",
+    "id": "",
+    "title": "抖音发布",
+    "days": 2,
+    "startMinute": 600,
+    "endMinute": 1320,
+    "enabled": false,
+    "sessionId": "",
+    "chatId": "",
+    "prompt": "先 ./node-run.sh douyin-act.mjs quota。只有主人已提供自己的素材、音色和发布授权，且今天无已发布或待确认作品时才制作。使用 make-video.py 和 publish-video；内容须有完整情节，声明 AI 生成。没有素材或授权就跳过；unknown 不重发。 遵守 SOCIAL_POLICY.md；任务由插件续期，不另建提醒，运营通知仅给主人。"
+  },
+  {
+    "key": "xhs-social",
+    "id": "",
+    "title": "小红书互动",
+    "days": 1,
+    "startMinute": 600,
+    "endMinute": 1320,
+    "enabled": false,
+    "sessionId": "",
+    "chatId": "",
+    "prompt": "先 ./xhs.sh browse 3 验证滚动和新内容，再通过 ./xhs.sh search 和 read 理解笔记后决定是否互动；只在主人已明确授权的对象、内容和预算范围内使用 xhs-act.mjs、xhs-message.mjs、xhs-share.mjs。收到新回复可自然接话，禁止重复和广告。无授权则跳过。 遵守 SOCIAL_POLICY.md；任务由插件续期，不另建提醒，运营通知仅给主人。"
+  }
+]

@@ -1,0 +1,35 @@
+{
+  "owner_qq": "",
+  "onebot_url": "http://127.0.0.1:3000",
+  "browser_cdp": "http://127.0.0.1:9227",
+  "voice": {
+    "provider": "breeze",
+    "id": "",
+    "model": "breeze-tts-2",
+    "instructions": "自然清晰地完整读完全部文字，不省略末尾字词，句尾自然停顿。",
+    "max_chars": 160,
+    "request_timeout": 75,
+    "attempts": 2,
+    "queue_expiry_seconds": 240
+  },
+  "douyin": {
+    "daily_likes": null,
+    "daily_comments": 100,
+    "daily_private_messages": 15,
+    "daily_watch_minutes": 30,
+    "daily_posts": 1,
+    "autonomous_recipients": false,
+    "daily_follows": 3,
+    "test_recipient": "",
+    "blocked_contact_ids": []
+  },
+  "xiaohongshu": {
+    "daily_likes": null,
+    "daily_comments": 100,
+    "daily_private_messages": 15,
+    "daily_watch_minutes": 30,
+    "daily_posts": 1,
+    "autonomous_recipients": false
+  },
+  "qq_groups": {}
+}

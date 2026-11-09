@@ -1,0 +1,134 @@
+{
+  "format": 1,
+  "components": [
+    {
+      "file": "dsh-desktop-mac-arm64.zip",
+      "url": "https://dshdesktop.com/updates/latest/dsh-desktop-mac-arm64.zip",
+      "hash": "a714a5f0c73b4c69e359886317ab6901a105799959ccef482fc102263291bea719cf381ecad8753253cff0280fd5c9a1f0b7e16dcd27c53337f2ebca7586a5a0",
+      "algorithm": "sha512",
+      "kind": "dsh",
+      "arch": "arm64",
+      "version": "0.13.2"
+    },
+    {
+      "file": "dsh-desktop-mac-x64.zip",
+      "url": "https://dshdesktop.com/updates/latest/dsh-desktop-mac-x64.zip",
+      "hash": "a351583f070d6eca2761c10d013e4f6ece086ff2e49ad4eb62c2fb6622632f6db614ca99896aed15ae565c155f31383df2d2c5f0dd665d8fb8e3033f247fab34",
+      "algorithm": "sha512",
+      "kind": "dsh",
+      "arch": "x64",
+      "version": "0.13.2"
+    },
+    {
+      "file": "qq.dmg",
+      "url": "https://qqdl.gtimg.cn/qqfile/QQNT/9.9.33/release/126b7ce6/QQ_7.0.0_260812_01.dmg",
+      "hash": "b195c26df362af58954c898ab1dd984784a2ba6f57a629e6fb9b3ecc3bf9e65c",
+      "algorithm": "sha256",
+      "kind": "qq",
+      "arch": "universal",
+      "version": "7.0.0_260812_01,9.9.33,126b7ce6"
+    },
+    {
+      "file": "microsoft-edge.dmg",
+      "url": "https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/bf6070c2-e62a-4839-a868-9f4a5e29b4c8/MicrosoftEdge-157.0.4341.42.dmg",
+      "hash": "045d56a56c4ea29f31a60ad4afdcbd0c961b15da834c6b32b880ac11b682b516",
+      "algorithm": "sha256",
+      "kind": "microsoft-edge",
+      "arch": "universal",
+      "version": "157.0.4341.42,bf6070c2-e62a-4839-a868-9f4a5e29b4c8"
+    },
+    {
+      "file": "NapCat.Shell.zip",
+      "url": "https://github.com/NapNeko/NapCatQQ/releases/download/v4.18.42/NapCat.Shell.zip",
+      "hash": "02e5ff0f79916c1e04c81c1b4590056406fb4293f1f1300c955e71fd08b2829d",
+      "algorithm": "sha256",
+      "kind": "napcat",
+      "version": "4.18.42"
+    },
+    {
+      "file": "ffmpeg-darwin-arm64.gz",
+      "url": "https://github.com/eugeneware/ffmpeg-static/releases/download/b6.1.1/ffmpeg-darwin-arm64.gz",
+      "hash": "8923876afa8db5585022d7860ec7e589af192f441c56793971276d450ed3bbfa",
+      "algorithm": "sha256",
+      "kind": "ffmpeg",
+      "arch": "arm64",
+      "version": "6.1.1"
+    },
+    {
+      "file": "ffmpeg-darwin-x64.gz",
+      "url": "https://github.com/eugeneware/ffmpeg-static/releases/download/b6.1.1/ffmpeg-darwin-x64.gz",
+      "hash": "929b375c1182d956c51f7ac25e0b2b0411fb01f6f407aa15c9758efeb4242106",
+      "algorithm": "sha256",
+      "kind": "ffmpeg",
+      "arch": "x64",
+      "version": "6.1.1"
+    },
+    {
+      "file": "dsh-onebot-qq-0.9.17.tgz",
+      "url": "https://registry.npmjs.org/dsh-onebot-qq/-/dsh-onebot-qq-0.9.17.tgz",
+      "hash": "6756c25249402ac9e696b9e7ce1ea491e7d330ac149ba7de39a01ac6e6f14a5301dfbe62ae8c0bf445db8c15b81020c2b01d34b1d4590d758b6b5bb478892586",
+      "algorithm": "sha512",
+      "kind": "plugin",
+      "name": "dsh-onebot-qq",
+      "version": "0.9.17",
+      "license": "BSD-3-Clause"
+    },
+    {
+      "file": "dsh-douyin-browser-local-1.4.6.tgz",
+      "url": "https://registry.npmjs.org/dsh-douyin-browser-local/-/dsh-douyin-browser-local-1.4.6.tgz",
+      "hash": "bca2972dbaa17a66b340b1f17ea3b605dedd8981a3dd69c4afcdb7397059c551b5550c05b5c58de711869cd8dc1d4c46610eedd0bcfa5d97c96f3e2026ed11b3",
+      "algorithm": "sha512",
+      "kind": "plugin",
+      "name": "dsh-douyin-browser-local",
+      "version": "1.4.6",
+      "license": "MIT"
+    },
+    {
+      "file": "dsh-any-audio-0.1.1.tgz",
+      "url": "https://registry.npmjs.org/dsh-any-audio/-/dsh-any-audio-0.1.1.tgz",
+      "hash": "be60bcadaaf73280ed233e4a0548595365f85b94c6ebd6fd3169fb5f8d0f5a5814e0faf7edff265b6d385a3617c0864e997bcda80138abf1ca384bc8dbbe01c4",
+      "algorithm": "sha512",
+      "kind": "plugin",
+      "name": "dsh-any-audio",
+      "version": "0.1.1",
+      "license": "MIT"
+    },
+    {
+      "file": "dsh-browser-cdp-1.7.5.tgz",
+      "url": "https://registry.npmjs.org/dsh-browser-cdp/-/dsh-browser-cdp-1.7.5.tgz",
+      "hash": "fdba30a38c47ac9998aab7f754fd654505840ed7f1c73472f66e419126b09cf93c631f5b5a93e0c952085f389ab988226d4829d99a30ba6bdd33000f27cc8180",
+      "algorithm": "sha512",
+      "kind": "plugin",
+      "name": "dsh-browser-cdp",
+      "version": "1.7.5",
+      "license": "MIT"
+    },
+    {
+      "file": "sensevoice-int8.tar.bz2",
+      "url": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2024-07-17.tar.bz2",
+      "hash": "7d1efa2138a65b0b488df37f8b89e3d91a60676e416f515b952358d83dfd347e",
+      "algorithm": "sha256",
+      "kind": "asr-model",
+      "arch": "universal",
+      "version": "2024-07-17"
+    },
+    {
+      "file": "ffprobe-darwin-x64.gz",
+      "url": "https://github.com/eugeneware/ffmpeg-static/releases/download/b6.1.1/ffprobe-darwin-x64.gz",
+      "hash": "d4da574d6e2e197bd259b47d69cf262df9e312af24ad960444f6d806d3d4c186",
+      "algorithm": "sha256",
+      "kind": "ffprobe",
+      "arch": "x64",
+      "version": "6.1.1"
+    },
+    {
+      "file": "ffprobe-darwin-arm64.gz",
+      "url": "https://github.com/eugeneware/ffmpeg-static/releases/download/b6.1.1/ffprobe-darwin-arm64.gz",
+      "hash": "d986a8ec7b030899fe66a8a288ed809a3543338705a3ce178cfb85869c5d80be",
+      "algorithm": "sha256",
+      "kind": "ffprobe",
+      "arch": "arm64",
+      "version": "6.1.1"
+    }
+  ]
+}

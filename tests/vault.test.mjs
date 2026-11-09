@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import crypto from 'node:crypto';import {seal,unseal,safeRelative} from '../migrate/vault.mjs';
+test('encrypted sync survives roundtrip and rejects tampering/wrong key/path',()=>{const k=crypto.randomBytes(32),data=Buffer.from('私有配置'),b=seal(data,k,'one');assert.deepEqual(unseal(b,k,'one'),data);assert.throws(()=>unseal(b,k,'two'));assert.throws(()=>unseal(b,crypto.randomBytes(32),'one'));b[15]^=1;assert.throws(()=>unseal(b,k,'one'));});
+test('vault paths cannot escape restore root',()=>{for(const p of ['../secret','/tmp/a','x/../../z','x\\..\\y',''])assert.equal(safeRelative(p),false);assert.equal(safeRelative('dsh/secrets/onebot.token'),true);});

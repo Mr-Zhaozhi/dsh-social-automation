@@ -1,0 +1,18 @@
+{
+  "enabled": false,
+  "account": {
+    "name": "",
+    "profile": ""
+  },
+  "mode": "home",
+  "testStatus": "unverified",
+  "capabilities": {
+    "browse": false,
+    "read": false,
+    "like": false,
+    "comment": false,
+    "reply": false,
+    "share": false,
+    "answer": false
+  }
+}

@@ -1,0 +1,34 @@
+import {incomingOrNote} from './lib/incoming-media.mjs';
+import {assertAutomaticInbox} from './lib/inbox-policy.mjs';
+import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';
+import {browser,workspace,waitForLock,atomicJSON} from './lib/runtime.mjs';import {managedPage,closeTemporary} from './lib/browser-pages.mjs';import {socialBudget} from './lib/social-budget.mjs';import {assertBrowserAvailable} from './lib/browser-scheduling.mjs';
+const args=process.argv.slice(2),cmd=args[0],opt=k=>args.includes('--'+k)?args[args.indexOf('--'+k)+1]:'';
+try{assertAutomaticInbox();}catch(e){console.log(JSON.stringify({error:e.message,code:e.code,confirmed:false,deliveryUncertain:false}));process.exit(1);}
+if(!['scan','reply','prepare'].includes(cmd))throw new Error('用法 scan | prepare --key ID | reply --key ID --text 正文 --confirm');
+await assertBrowserAvailable();const release=await waitForLock('browser-actions'),file=path.join(workspace,'.state/douyin-comment-replies.json');let b,p,outboundDispatched=false;
+const stable=s=>String(s||'').replace(/\s|\[[^\]]{1,20}\]/g,''),hash=r=>createHash('sha256').update(JSON.stringify([r.uid,stable(r.text),r.image?new URL(r.image).pathname:''])).digest('hex');
+try{
+ b=await browser();p=await managedPage(b.contexts()[0],'douyin-notifications');await p.goto('https://www.douyin.com/jingxuan',{waitUntil:'load'});await p.locator('.tab-user_self a').waitFor({timeout:15000});const bell=p.getByText('通知',{exact:true}),panel=p.locator('[data-e2e="listDlgTest-container"]');
+ for(let attempt=0;attempt<3;attempt++){await p.mouse.move(5,5);await bell.hover({timeout:10000});try{await panel.waitFor({timeout:4000});break;}catch(e){if(attempt===2)throw e;}}
+ await panel.locator('.v4ybwR9T').first().waitFor({timeout:10000});
+ const rows=(await panel.locator('.v4ybwR9T').evaluateAll(es=>es.map((e,index)=>({index,uid:e.querySelector('[data-e2e="user-name-card"]')?.closest('a')?.getAttribute('href')?.split('/user/')[1]?.split('?')[0],name:e.querySelector('[data-e2e="user-name-card"]')?.textContent?.trim(),text:e.querySelector('pre')?.textContent?.trim(),hint:[...e.querySelectorAll('.Q9Ls5TTX span,.RlNdyQJL span')].find(s=>/回复了你的评论|评论了你的作品|在评论中提到了你/.test(s.textContent))?.textContent,time:e.querySelector('.Q9Ls5TTX span:last-child,.RlNdyQJL span:last-child')?.textContent,image:e.querySelector('img.A2FRf3V9')?.getAttribute('src')?.split('?')[0]?.split('~')[0]})))).filter(r=>r.uid&&r.text&&/回复了你的评论|评论了你的作品|在评论中提到了你/.test(r.hint||'')).map(r=>({...r,key:hash(r)}));
+ if(cmd==='scan'){console.log(JSON.stringify(rows.map(({image,index,...r})=>r)));}
+ else{
+  const rowsMatching=rows.filter(r=>r.key===opt('key'));if(rowsMatching.length!==1)throw new Error('没有唯一的目标通知');const r=rowsMatching[0],old=fs.existsSync(file)?JSON.parse(fs.readFileSync(file)):{};if(old[r.key]&&old[r.key].status!=='not-sent'&&cmd==='reply')throw new Error('这条通知已有记录，不重发');
+  await panel.locator('.v4ybwR9T').nth(r.index).locator('pre').click();await p.locator('[data-e2e="comment-item"]').first().waitFor({timeout:20000});await p.evaluate(()=>document.querySelectorAll('video').forEach(v=>v.pause()));
+  const ids=await p.locator('[data-e2e="comment-item"]').evaluateAll((es,r)=>es.filter(e=>[...e.querySelectorAll('a[href*="/user/"]')].some(a=>a.closest('[data-e2e="comment-item"]')===e&&a.getAttribute('href').split('/user/')[1]?.split('?')[0]===r.uid)&&[...e.querySelectorAll('.FduGc_lz')].some(t=>t.closest('[data-e2e="comment-item"]')===e&&t.textContent.trim()===r.text)).map(e=>[...e.querySelectorAll('[id^="tooltip_"]')].find(n=>n.closest('[data-e2e="comment-item"]')===e)?.id).filter(Boolean),r);
+  if(ids.length!==1)throw new Error('没有唯一的评论ID');const item=p.locator('#'+ids[0]).locator('xpath=ancestor::div[@data-e2e="comment-item"][1]');await item.getByText('回复',{exact:true}).click();
+  const box=p.locator('.comment-input-container').filter({visible:true}),editor=box.locator('[contenteditable=true]');await editor.waitFor();const target='回复@'+r.name+': '+r.text;
+  const verify=async()=>{if(!(await box.innerText()).includes(target))throw new Error('回复对象或原文不一致');if(await p.locator('#'+ids[0]).count()!==1)throw new Error('目标评论已变化');};await verify();if((await editor.innerText()).trim())throw new Error('回复框已有草稿');
+  const sendButton=()=>box.locator('.commentInput-right-ct .oWdMk9B9 > .wchsYBpK.jfGCpJo0:last-child');
+  if(cmd==='prepare'){await editor.fill('这是一段不会发送的输入验证。');await verify();if(await sendButton().count()!==1)throw new Error('发送控件不唯一');await sendButton().click({trial:true});await editor.fill('');const media=await incomingOrNote({platform:'douyin',eventId:r.key,peer:r.uid,kind:/提到/.test(r.hint)?'comment-mention':'comment-reply',url:p.url(),page:p});console.log(JSON.stringify({media,prepared:true,key:r.key,name:r.name,incomingCommentId:ids[0].slice(8),delivery:false,context:await p.locator('[data-e2e=video-desc],[data-e2e=detail-video-info]').allTextContents()}));}
+  else{
+   const text=opt('text');if(!args.includes('--confirm')||!text||[...text].length>180)throw new Error('需要1至180字正文和 --confirm');let dispatched=false;const save=(status,extra={})=>{old[r.key]={status,name:r.name,text,at:new Date().toISOString(),...extra};atomicJSON(file,old);};
+   const result=await socialBudget.run('douyin','comment',r.key,async()=>{try{
+    await editor.fill(text);await verify();if((await editor.innerText()).trim()!==text)throw new Error('草稿回读不一致');const send=sendButton();if(await send.count()!==1||await box.locator('input[type=file]').evaluateAll(es=>es.some(e=>e.files?.length)))throw new Error('发送控件或附件状态异常');await send.click({trial:true,timeout:5000});assertAutomaticInbox();save('pending');dispatched=true;outboundDispatched=true;await send.click({timeout:5000});
+    await p.waitForFunction(text=>[...document.querySelectorAll('[data-e2e="comment-item"] .FduGc_lz')].some(e=>e.textContent.trim()===text),text,{timeout:15000});
+    const fresh=await p.locator('[data-e2e="comment-item"] .FduGc_lz').evaluateAll((es,text)=>es.filter(e=>e.textContent.trim()===text).map(e=>e.closest('[data-e2e="comment-item"]')?.querySelector('[id^="tooltip_"]')?.id).filter(Boolean),text);if(fresh.length!==1)throw new Error('没有唯一新评论回执');save('confirmed',{commentId:fresh[0].slice(8)});return {confirmed:true,commentId:fresh[0].slice(8)};
+   }catch(e){save(dispatched?'unknown':'not-sent',{error:String(e.message).slice(-250)});e.beforeDelivery=!dispatched;throw e;}});console.log(JSON.stringify(result));
+  }
+ }
+}catch(e){console.log(JSON.stringify({error:String(e.message).slice(-500),code:e.code,confirmed:false,deliveryUncertain:outboundDispatched}));process.exitCode=1;}finally{if(p)await p.evaluate(()=>document.querySelectorAll('video').forEach(v=>v.pause())).catch(()=>{});await closeTemporary(p);await b?.close();release();}

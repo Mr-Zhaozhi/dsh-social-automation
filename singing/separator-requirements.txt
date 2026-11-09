@@ -1,0 +1,9 @@
+audio-separator==0.17.5
+onnxruntime==1.19.2
+onnx==1.16.2
+numpy==1.26.4
+scipy==1.13.1
+librosa==0.10.2
+numba==0.60.0
+llvmlite==0.43.0
+setuptools==69.5.1

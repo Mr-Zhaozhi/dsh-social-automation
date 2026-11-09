@@ -1,0 +1,11 @@
+{
+  "edition": "public-source-reference",
+  "passed": true,
+  "filesChecked": 302,
+  "accountConfiguration": "blank examples",
+  "assetsIncluded": false,
+  "credentialsIncluded": false,
+  "originalGitHistoryIncluded": false,
+  "runtimeDataIncluded": false,
+  "automaticTasksEnabled": false
+}
